@@ -290,7 +290,8 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers
             {
                 var vppEngine = globalEngine as VirtualPathProviderViewEngine;
                 var newEngine = vppEngine != null ? ControllerExtensions.GetViewEngine(vppEngine, pathTransformations) : globalEngine;
-                viewEngines.Add(newEngine);
+                if (newEngine != null)
+                    viewEngines.Add(newEngine);
             }
 
             return viewEngines;
@@ -304,7 +305,21 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         private static IViewEngine GetViewEngine(VirtualPathProviderViewEngine viewEngine, IList<Func<string, string>> pathTransformations)
         {
-            var newEngine = (VirtualPathProviderViewEngine)Activator.CreateInstance(viewEngine.GetType());
+            VirtualPathProviderViewEngine newEngine;
+            var precompiledEngine = viewEngine as CompositePrecompiledMvcEngineWrapper;
+            if (precompiledEngine != null)
+            {
+                if (!precompiledEngine.Package.IsNullOrEmpty() && !string.Equals(precompiledEngine.Package, new PackageManager().GetCurrentPackage(), StringComparison.OrdinalIgnoreCase))
+                    return null;
+
+                newEngine = precompiledEngine.Clone();
+            }
+            else
+            {
+                newEngine = (VirtualPathProviderViewEngine)Activator.CreateInstance(viewEngine.GetType());
+                newEngine.ViewLocationCache = DefaultViewLocationCache.Null;
+            }
+
             newEngine.AreaViewLocationFormats = ControllerExtensions.AppendControllerVirtualPath(viewEngine.AreaViewLocationFormats, pathTransformations);
             newEngine.AreaMasterLocationFormats = ControllerExtensions.AppendControllerVirtualPath(viewEngine.AreaPartialViewLocationFormats, pathTransformations);
             newEngine.AreaPartialViewLocationFormats = ControllerExtensions.AppendControllerVirtualPath(viewEngine.AreaPartialViewLocationFormats, pathTransformations);
@@ -312,7 +327,15 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers
             newEngine.MasterLocationFormats = ControllerExtensions.AppendControllerVirtualPath(viewEngine.MasterLocationFormats, pathTransformations);
             newEngine.PartialViewLocationFormats = ControllerExtensions.AppendControllerVirtualPath(viewEngine.PartialViewLocationFormats, pathTransformations);
 
-            newEngine.ViewLocationCache = DefaultViewLocationCache.Null;
+            if (precompiledEngine != null)
+            {
+                newEngine.AreaViewLocationFormats = newEngine.AreaViewLocationFormats.Select(p => FrontendManager.VirtualPathBuilder.RemoveParams(p)).ToArray();
+                newEngine.AreaMasterLocationFormats = newEngine.AreaMasterLocationFormats.Select(p => FrontendManager.VirtualPathBuilder.RemoveParams(p)).ToArray();
+                newEngine.AreaPartialViewLocationFormats = newEngine.AreaPartialViewLocationFormats.Select(p => FrontendManager.VirtualPathBuilder.RemoveParams(p)).ToArray();
+                newEngine.ViewLocationFormats = newEngine.ViewLocationFormats.Select(p => FrontendManager.VirtualPathBuilder.RemoveParams(p)).ToArray();
+                newEngine.MasterLocationFormats = newEngine.MasterLocationFormats.Select(p => FrontendManager.VirtualPathBuilder.RemoveParams(p)).ToArray();
+                newEngine.PartialViewLocationFormats = newEngine.PartialViewLocationFormats.Select(p => FrontendManager.VirtualPathBuilder.RemoveParams(p)).ToArray();
+            }
 
             return newEngine;
         }

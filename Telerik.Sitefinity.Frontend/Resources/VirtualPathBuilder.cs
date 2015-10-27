@@ -1,9 +1,11 @@
-﻿using System;
+﻿using RazorGenerator.Mvc;
+using System;
 using System.Collections;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Web.Hosting;
+using System.Web.Mvc;
 using Telerik.Sitefinity.Abstractions.VirtualPath;
 
 namespace Telerik.Sitefinity.Frontend.Resources
@@ -121,6 +123,20 @@ namespace Telerik.Sitefinity.Frontend.Resources
                 mappedPath = Path.Combine(mappedPath, virtualPath.Substring(2).Replace('/', '\\'));
 
             return mappedPath;
+        }
+
+        public virtual string GetViewPath(IView view)
+        {
+            var builtView = view as BuildManagerCompiledView;
+            if (builtView != null)
+            {
+                return builtView.ViewPath;
+            }
+            else
+            {
+                var precompiledView = view as PrecompiledMvcView;
+                return precompiledView != null ? precompiledView.VirtualPath : null;
+            }
         }
 
         private const string FrontendAssemblyBasePath = "Frontend-Assembly/{0}/";

@@ -46,6 +46,8 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers
             this.InitializeControllers(controllerTypes);
 
             this.InitializeCustomRouting();
+
+            this.RegisterPrecompiledViewEngines(assemblies);
         }
 
         /// <summary>
@@ -294,7 +296,7 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers
         }
 
         /// <summary>
-        /// Registers MVC widgets as templatable controls
+        /// Registers MVC widgets as templatable controls0
         /// </summary>
         /// <param name="controllerTypes">The controller types.</param>
         private void RegisterTemplateableControls(IEnumerable<Type> controllerTypes)
@@ -337,6 +339,40 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers
                 {
                     Res.RegisterResource(resourceClass);
                 }
+            }
+        }
+
+        private void RegisterPrecompiledViews(IEnumerable<Assembly> assemblies, Dictionary<string, List<RazorGenerator.Mvc.PrecompiledViewAssembly>> precompiledViewAssemblies)
+        {
+            foreach (var assembly in assemblies)
+            {
+                var package = assembly.GetCustomAttribute<ControllerContainerAttribute>().Package ?? string.Empty;
+                if (!precompiledViewAssemblies.ContainsKey(package))
+                    precompiledViewAssemblies[package] = new List<RazorGenerator.Mvc.PrecompiledViewAssembly>();
+
+                var basePath = package.IsNullOrEmpty() ? "~/" + FrontendManager.VirtualPathBuilder.GetVirtualPath(assembly) : "~/" + FrontendManager.VirtualPathBuilder.GetVirtualPath(typeof(ControllerContainerInitializer));
+
+                precompiledViewAssemblies[package].Add(new RazorGenerator.Mvc.PrecompiledViewAssembly(assembly, basePath)
+                {
+                    UsePhysicalViewsIfNewer = false
+                });
+            }
+        }
+
+        private void RegisterPrecompiledViewEngines(IEnumerable<Assembly> assemblies)
+        {
+            var precompiledViewAssemblies = new Dictionary<string, List<RazorGenerator.Mvc.PrecompiledViewAssembly>>(StringComparer.OrdinalIgnoreCase);
+            this.RegisterPrecompiledViews(assemblies, precompiledViewAssemblies);
+
+            if (precompiledViewAssemblies.ContainsKey(string.Empty))
+            {
+                ViewEngines.Engines.Insert(0, new CompositePrecompiledMvcEngineWrapper(precompiledViewAssemblies[string.Empty].ToArray()));
+            }
+
+            foreach (var key in precompiledViewAssemblies.Keys)
+            {
+                if (!key.IsNullOrEmpty())
+                    ViewEngines.Engines.Insert(0, new CompositePrecompiledMvcEngineWrapper(precompiledViewAssemblies[key].ToArray()) { Package = key });
             }
         }
 

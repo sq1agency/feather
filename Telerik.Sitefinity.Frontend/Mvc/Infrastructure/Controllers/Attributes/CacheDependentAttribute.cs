@@ -30,10 +30,10 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers.Attributes
 
                     if (viewResult != null)
                     {
-                        var builtView = viewResult.View as BuildManagerCompiledView;
-                        if (builtView != null)
+                        var viewPath = FrontendManager.VirtualPathBuilder.GetViewPath(viewResult.View);
+                        if (!viewPath.IsNullOrEmpty())
                         {
-                            var cacheDependency = this.GetCacheDependency(builtView.ViewPath);
+                            var cacheDependency = this.GetCacheDependency(viewPath);
                             if (cacheDependency != null)
                             {
                                 context.Response.AddCacheDependency(cacheDependency);

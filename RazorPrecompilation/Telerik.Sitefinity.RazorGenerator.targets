@@ -1,0 +1,16 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <RazorGeneratorMsBuildPath Condition="$(RazorGeneratorMsBuildPath)==''">..\packages\RazorGenerator.MsBuild.2.2.2\tools\RazorGenerator.MsBuild.dll</RazorGeneratorMsBuildPath>
+    <CleanDependsOn>
+      CleanRazorCsFiles;
+      $(CleanDependsOn);
+    </CleanDependsOn>
+  </PropertyGroup>
+  <ItemGroup>
+    <RazorSrcFiles Include="**\*.cshtml" />
+  </ItemGroup>
+
+  <Target Name="CleanRazorCsFiles">
+    <RemoveDir Condition="$(RazorViewsCodeGenDirectory)!=''" ContinueOnError="true" Directories="$(RazorViewsCodeGenDirectory)"/>
+  </Target>
+</Project>

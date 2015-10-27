@@ -72,6 +72,10 @@
       <HintPath>..\packages\Sitefinity.RazorEngine.3.0.8.0\lib\net40\RazorEngine.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="RazorGenerator.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\RazorGenerator.Mvc.2.3.12\lib\net40\RazorGenerator.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ServiceStack, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ServiceStack.Signed.4.0.44\lib\net40\ServiceStack.dll</HintPath>
@@ -281,6 +285,10 @@
     <Reference Include="Telerik.Web.UI.Skins">
       <HintPath>..\packages\Telerik.Web.UI.2015.3.930.40\lib\net40\Telerik.Web.UI.Skins.dll</HintPath>
     </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.0.3\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\AssemblyInfoShare\SharedAssemblyInfo.cs">
@@ -289,6 +297,8 @@
     <Compile Include="GridSystem\GridControlToolboxFilter.cs" />
     <Compile Include="Mvc\Controllers\PersonalizationDesignerController.cs" />
     <Compile Include="Mvc\Controllers\GridDesignerController.cs" />
+    <Compile Include="Mvc\Helpers\HtmlAttributeHelpers.cs" />
+    <Compile Include="Mvc\Infrastructure\Controllers\CompositePrecompiledMvcEngineWrapper.cs" />
     <Compile Include="Mvc\Infrastructure\Routing\AttributeRoutingManager.cs" />
     <Compile Include="FilesMonitoring\GridFileManager.cs" />
     <Compile Include="FilesMonitoring\FileChangeType.cs" />
@@ -810,6 +820,10 @@
     <EmbeddedResource Include="Mvc\Scripts\LABjs\LAB.src.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!--START of Razor pre-compilation-->
+  <!-- <Import Project="$(ProjectDir)..\RazorPrecompilation\Telerik.Sitefinity.RazorGenerator.targets" /> -->
+  <!-- <Import Project="$(ProjectDir)..\RazorPrecompilation\RazorGenerator.MsBuild.targets" /> -->
+  <!--END of Razor pre-compilation-->
   <Import Project="OpenAccessNuget.targets" />
   <Target Name="BeforeBuild">
     <Copy SourceFiles="$(SolutionDir)FxCop\CustomDictionary.xml" DestinationFolder="$(CodeAnalysisPath)" OverwriteReadOnlyFiles="true" Retries="10" ContinueOnError="false" />
@@ -838,4 +852,11 @@
     <OpenAccessPath>$(ProjectDir)..\..\Reference Assemblies\Telerik\OpenAccess</OpenAccessPath>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <Import Project="..\packages\RazorGenerator.MsBuild.2.2.2\build\RazorGenerator.MsBuild.targets" Condition="Exists('..\packages\RazorGenerator.MsBuild.2.2.2\build\RazorGenerator.MsBuild.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\RazorGenerator.MsBuild.2.2.2\build\RazorGenerator.MsBuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RazorGenerator.MsBuild.2.2.2\build\RazorGenerator.MsBuild.targets'))" />
+  </Target>
 </Project>

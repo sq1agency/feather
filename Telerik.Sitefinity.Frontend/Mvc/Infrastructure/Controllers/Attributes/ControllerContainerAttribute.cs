@@ -14,13 +14,21 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers.Attributes
         }
 
         public ControllerContainerAttribute(Type initializationType, string initializationMethodName)
+            : this(initializationType, initializationMethodName, null)
+        {
+        }
+
+        public ControllerContainerAttribute(Type initializationType, string initializationMethodName, string package)
         {
             this.InitializationType = initializationType;
             this.InitializationMethod = initializationMethodName;
+            this.Package = package;
         }
 
         public Type InitializationType { get; private set; }
 
         public string InitializationMethod { get; private set; }
+
+        public string Package { get; private set; }
     }
 }
