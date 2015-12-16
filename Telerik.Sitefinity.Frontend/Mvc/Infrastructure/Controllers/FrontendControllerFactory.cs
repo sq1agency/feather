@@ -107,9 +107,13 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers
 
         private static IList<Func<string, string>> GetControllerPathTransformations(Controller controller, string customPath)
         {
-            var packagesManager = new PackageManager();
-            var currentPackage = packagesManager.GetCurrentPackage();
+            var currentPackage = new PackageManager().GetCurrentPackage();
             var pathTransformations = new List<Func<string, string>>();
+
+            if (!currentPackage.IsNullOrEmpty())
+            {
+                pathTransformations.Add(FrontendControllerFactory.GetPathTransformation(FrontendManager.VirtualPathBuilder.GetVirtualPath(typeof(FrontendControllerFactory)) + PackageManager.PackagesFolder + "/" + currentPackage + "/Mvc/", null));
+            }
 
             var controllerVp = customPath ?? AppendDefaultPath(FrontendManager.VirtualPathBuilder.GetVirtualPath(controller.GetType().Assembly));
             FrontendControllerFactory.AddDynamicControllerPathTransformations(controller, controllerVp, currentPackage, pathTransformations);
@@ -137,7 +141,7 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers
         {
             if (controller != null && controller.Request != null && controller.Request.QueryString != null && controller.RouteData != null && controller.RouteData.Values.ContainsKey("widgetName") && (string)controller.RouteData.Values["widgetName"] == "DynamicContent")
             {
-                var controlId = controller.Request.QueryString["controlId"] as string;
+                var controlId = controller.Request.QueryString["controlId"];
                 Guid controlIdGuid;
 
                 if (!string.IsNullOrEmpty(controlId) && Guid.TryParse(controlId, out controlIdGuid))
