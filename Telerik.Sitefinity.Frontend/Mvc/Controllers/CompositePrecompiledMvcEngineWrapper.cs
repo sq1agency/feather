@@ -17,7 +17,7 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Controllers
     /// <summary>
     /// View engine that serves precompiled views from several assemblies.
     /// </summary>
-    internal class CompositePrecompiledMvcEngineWrapper : CompositePrecompiledMvcEngine
+    public class CompositePrecompiledMvcEngineWrapper : CompositePrecompiledMvcEngine
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CompositePrecompiledMvcEngineWrapper"/> class.
@@ -127,18 +127,7 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Controllers
             return base.CreatePartialView(controllerContext, partialPath);
         }
 
-        private void LogPrecompiledViewUsage(ControllerContext controllerContext, string viewPath)
-        {
-            if (Config.Get<FeatherConfig>().LogPrecompiledViewUsage && controllerContext != null && controllerContext.Controller != null && controllerContext.RouteData != null)
-            {
-                var controllerName = controllerContext.Controller.GetType().Name;
-                var actionName = controllerContext.RouteData.Values["action"];
-                var message = string.Format("Precompiled view used for controller: \"{0}\", action: \"{1}\", ViewPath: {2}", controllerName, actionName, viewPath);
-                Log.Write(message, TraceEventType.Information);
-            }
-        }
-
-        private bool ShouldServe(string virtualPath)
+        protected bool ShouldServe(string virtualPath)
         {
             string precompiledFileHash = null;
             foreach (var asm in this.precompiledAssemblies)
@@ -158,6 +147,17 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Controllers
             }
 
             return virtualResourceHash == null || virtualResourceHash == precompiledFileHash;
+        }
+
+        private void LogPrecompiledViewUsage(ControllerContext controllerContext, string viewPath)
+        {
+            if (Config.Get<FeatherConfig>().LogPrecompiledViewUsage && controllerContext != null && controllerContext.Controller != null && controllerContext.RouteData != null)
+            {
+                var controllerName = controllerContext.Controller.GetType().Name;
+                var actionName = controllerContext.RouteData.Values["action"];
+                var message = string.Format("Precompiled view used for controller: \"{0}\", action: \"{1}\", ViewPath: {2}", controllerName, actionName, viewPath);
+                Log.Write(message, TraceEventType.Information);
+            }
         }
 
         private string VirtualResourceHash(string virtualPath)
