@@ -178,7 +178,8 @@ namespace Telerik.Sitefinity.Frontend.Resources
             if (SystemManager.IsDesignMode)
             {
                 var draft = pageManager.GetPageDraft(pageNode.PageId);
-                return draft.TemplateId != Guid.Empty ? this.GetPackageFromTemplateId(draft.TemplateId.ToString()) : null;
+                if (draft != null)
+                    return draft.TemplateId != Guid.Empty ? this.GetPackageFromTemplateId(draft.TemplateId.ToString()) : null;
             }
 
             var pageData = pageNode.GetPageData();
