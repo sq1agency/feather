@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Telerik.Sitefinity.Frontend.Services.PagesService.DTO
 {
-    internal class PagesViewModel
+    public class PagesViewModel
     {
         public IEnumerable<string> PageUrls { get; set; }
     }
