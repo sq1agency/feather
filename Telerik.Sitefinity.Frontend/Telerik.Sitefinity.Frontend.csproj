@@ -110,6 +110,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
@@ -142,7 +143,6 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Telerik.OpenAccess, Version=2016.1.224.1, Culture=neutral, PublicKeyToken=7ce17eeaf1d59342, processorArchitecture=MSIL">
       <HintPath>..\packages\Telerik.DataAccess.Core.2016.1.224.1\lib\net40\Telerik.OpenAccess.dll</HintPath>
@@ -420,6 +420,10 @@
     <Compile Include="Mvc\Models\ListDisplayMode.cs" />
     <Compile Include="Mvc\Models\SelectionMode.cs" />
     <Compile Include="Mvc\StringResources\DesignerResources.cs" />
+    <Compile Include="Services\PagesService\DTO\PagesGetRequest.cs" />
+    <Compile Include="Services\PagesService\DTO\PagesViewModel.cs" />
+    <Compile Include="Services\PagesService\PagesServiceStackPlugin.cs" />
+    <Compile Include="Services\PagesService\PagesWebService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Resources\GenericRouteHandler.cs" />
     <Compile Include="Resources\RazorTemplateProcessor.cs" />
