@@ -22,11 +22,12 @@ namespace Telerik.Sitefinity.Frontend.Services.PagesService
 {
     public class PagesWebService : Service
     {
-        public PagesViewModel GetUrls()
+        [AddHeader(ContentType = MimeTypes.Json)]
+        public PagesViewModel Get(PagesGetRequest request)
         {
             var pageManager = PageManager.GetManager();
 
-            IEnumerable<PageData> info = pageManager
+            IEnumerable<PageData> pages = pageManager
                 .GetPageDataList()
                 .Where(pageData =>
                     pageData.Status == ContentLifecycleStatus.Live &&
@@ -34,10 +35,17 @@ namespace Telerik.Sitefinity.Frontend.Services.PagesService
                     pageData.Controls.Where(objectData => objectData.ObjectType == WidgetWrapperTypeName).Any())
                 .ToList();
 
-            var pageUrls = new SortedSet<string>();
-            foreach (PageData pageData in info)
+            var pageUrls = new HashSet<string>();
+
+            var controllerFactory = ControllerBuilder.Current.GetControllerFactory() as FrontendControllerFactory;
+            if (controllerFactory == null)
             {
-                PageNode pageNode = pageData.NavigationNode;
+                return null;
+            }
+
+            foreach (PageData page in pages)
+            {
+                PageNode pageNode = page.NavigationNode;
 
                 var pageCultures = pageNode.AvailableCultures;
 
@@ -50,29 +58,26 @@ namespace Telerik.Sitefinity.Frontend.Services.PagesService
                     pageUrls.Add(cultureDefinedPageUrl);
                 }
 
-                var controllerFactory = ControllerBuilder.Current.GetControllerFactory() as FrontendControllerFactory;
-                if (controllerFactory == null)
+                foreach (PageControl control in page.Controls)
                 {
-                    continue;
-                }
-
-                foreach (PageControl control in pageData.Controls)
-                {
-                    var controlUrl = this.GetPageControlUrls(pageNode.Id, control, controllerFactory);
-                    pageUrls.Add(controlUrl);
+                    var controlUrl = this.GetPageControlUrl(pageNode.Id, control, controllerFactory);
+                    if (!string.IsNullOrEmpty(controlUrl))
+                    {
+                        pageUrls.Add(controlUrl);
+                    }
                 }
             }
 
             return new PagesViewModel() { PageUrls = pageUrls };
         }
 
-        private string GetPageControlUrls(Guid navigationNodeId, PageControl control, FrontendControllerFactory controllerFactory)
+        private string GetPageControlUrl(Guid navigationNodeId, PageControl control, FrontendControllerFactory controllerFactory)
         {
             string controllerName = control.Properties.FirstOrDefault(p => p.Name == "ControllerName").Value;
             var controllerInfo = ControllerStore.Controllers().FirstOrDefault(c => c.ControllerType.ToString() == controllerName);
             var controllerType = controllerInfo.ControllerType;
 
-            dynamic convertedController = this.GetConvertedController(controllerType, controllerFactory);
+            var controller = controllerFactory.CreateController(HttpContext.Current.Request.RequestContext, controllerType.FullName);
 
             var modelPropertyInfo = controllerType
                 .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
@@ -83,8 +88,8 @@ namespace Telerik.Sitefinity.Frontend.Services.PagesService
                 return null;
             }
 
-            var firstItem = this.GetControlItem(modelPropertyInfo, convertedController);
-            if (!(firstItem is ILocatable))
+            var firstItem = this.GetControlItem(modelPropertyInfo, controller);
+            if (firstItem == null)
             {
                 return null;
             }
@@ -92,13 +97,7 @@ namespace Telerik.Sitefinity.Frontend.Services.PagesService
             return HyperLinkHelpers.GetDetailPageUrl(firstItem, navigationNodeId);
         }
 
-        private object GetConvertedController(Type controllerType, FrontendControllerFactory controllerFactory)
-        {
-            var controller = controllerFactory.CreateController(HttpContext.Current.Request.RequestContext, controllerType.FullName) as Controller;
-            return Convert.ChangeType(controller, controllerType);
-        }
-
-        private IDataItem GetControlItem(PropertyInfo modelPropertyInfo, dynamic convertedController)
+        private IDataItem GetControlItem(PropertyInfo modelPropertyInfo, object convertedController)
         {
             if (modelPropertyInfo == null)
             {
@@ -115,6 +114,7 @@ namespace Telerik.Sitefinity.Frontend.Services.PagesService
             var manager = ManagerBase.GetMappedManager(modelContentType, null);
 
             var firstItem = manager.GetItems(modelContentType, null, null, 0, 1).OfType<IDataItem>().FirstOrDefault();
+
             return firstItem as ILocatable;
         }
 
