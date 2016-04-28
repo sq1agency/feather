@@ -17,7 +17,7 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Controllers
     /// <summary>
     /// View engine that serves precompiled views from several assemblies.
     /// </summary>
-    public class CompositePrecompiledMvcEngineWrapper : CompositePrecompiledMvcEngine
+    public class CompositePrecompiledMvcEngineWrapper : CompositePrecompiledMvcEngine, ICompositePrecompiledMvcEngineWrapper
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CompositePrecompiledMvcEngineWrapper"/> class.
@@ -50,6 +50,20 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Controllers
             this.precompiledAssemblies = viewAssemblies.ToArray();
             this.packageName = packageName;
         }
+        
+        /// <summary>
+        /// Gets the collection of precompiled assemblies.
+        /// </summary>
+        /// <value>
+        /// The collection of precompiled assemblies
+        /// </value>
+        public IEnumerable<PrecompiledViewAssemblyWrapper> PrecompiledAssemblies
+        {
+            get 
+            {
+                return this.precompiledAssemblies; 
+            }
+        }
 
         /// <summary>
         /// Gets the name of the package.
@@ -69,7 +83,7 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Controllers
         /// Creates a new instance that is a clone of this one.
         /// </summary>
         /// <returns>The new instance.</returns>
-        public CompositePrecompiledMvcEngineWrapper Clone()
+        public virtual ICompositePrecompiledMvcEngineWrapper Clone()
         {
             return new CompositePrecompiledMvcEngineWrapper(this.precompiledAssemblies, null, this.PackageName);
         }

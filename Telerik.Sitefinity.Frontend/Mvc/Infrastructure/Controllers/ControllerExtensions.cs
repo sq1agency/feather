@@ -331,7 +331,7 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers
         private static IViewEngine GetViewEngine(VirtualPathProviderViewEngine viewEngine, IList<Func<string, string>> pathTransformations)
         {
             VirtualPathProviderViewEngine newEngine;
-            var precompiledEngine = viewEngine as CompositePrecompiledMvcEngineWrapper;
+            var precompiledEngine = viewEngine as ICompositePrecompiledMvcEngineWrapper;
             if (precompiledEngine != null)
             {
                 if (!precompiledEngine.PackageName.IsNullOrEmpty() &&
@@ -340,7 +340,7 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers
                     return null;
                 }
 
-                newEngine = precompiledEngine.Clone();
+                newEngine = (VirtualPathProviderViewEngine)precompiledEngine.Clone();
             }
             else
             {
