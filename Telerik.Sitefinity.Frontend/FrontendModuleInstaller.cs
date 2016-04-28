@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Ninject;
 using Telerik.Microsoft.Practices.Unity;
@@ -9,8 +8,8 @@ using Telerik.Sitefinity.Frontend.Modules.Comments;
 using Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers;
 using Telerik.Sitefinity.Frontend.Services.FilesService;
 using Telerik.Sitefinity.Frontend.Services.ListsService;
+using Telerik.Sitefinity.Frontend.Services.PagesService;
 using Telerik.Sitefinity.Frontend.Services.ReviewsService;
-using Telerik.Sitefinity.Modules.Pages;
 using Telerik.Sitefinity.Modules.Pages.Configuration;
 using Telerik.Sitefinity.Pages.Model;
 using Telerik.Sitefinity.Services;
@@ -42,6 +41,7 @@ namespace Telerik.Sitefinity.Frontend
             SystemManager.RegisterServiceStackPlugin(new ListsServiceStackPlugin());
             SystemManager.RegisterServiceStackPlugin(new FilesServiceStackPlugin());
             SystemManager.RegisterServiceStackPlugin(new ReviewsServiceStackPlugin());
+            SystemManager.RegisterServiceStackPlugin(new PagesServiceStackPlugin());
 
             ninjectDependencyResolver.Load(new ControllerContainerInitializer().ControllerContainerAssemblies);
         }
