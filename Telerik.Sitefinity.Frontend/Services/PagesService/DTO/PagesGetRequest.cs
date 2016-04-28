@@ -1,6 +1,6 @@
 ﻿namespace Telerik.Sitefinity.Frontend.Services.PagesService.DTO
 {
-    internal class PagesGetRequest
+    public class PagesGetRequest
     {
     }
 }
