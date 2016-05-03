@@ -20,8 +20,17 @@ using Telerik.Sitefinity.Web;
 
 namespace Telerik.Sitefinity.Frontend.Services.PagesService
 {
+    /// <summary>
+    /// This class provides methods for Sitefinity pages.
+    /// </summary>
+    /// <seealso cref="ServiceStack.Service" />
     public class PagesWebService : Service
     {
+        /// <summary>
+        /// Gets all pages.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
         [AddHeader(ContentType = MimeTypes.Json)]
         public PagesViewModel Get(PagesGetRequest request)
         {
