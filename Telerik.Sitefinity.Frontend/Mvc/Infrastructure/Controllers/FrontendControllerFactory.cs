@@ -67,7 +67,7 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers
             this.Dispose(true);
             GC.SuppressFinalize(this);
         }
-        
+
         /// <summary>
         /// Enhances the view engines.
         /// </summary>
@@ -80,7 +80,7 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers
                 controller.UpdateViewEnginesCollection(() => FrontendControllerFactory.GetControllerPathTransformations(controller, enhanceAttr.VirtualPath));
             }
         }
-        
+
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
