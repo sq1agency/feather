@@ -34,19 +34,6 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers
         #region Public members
 
         /// <summary>
-        /// Enhances the view engines.
-        /// </summary>
-        /// <param name="controller">The controller.</param>
-        public static void EnhanceViewEngines(Controller controller)
-        {
-            var enhanceAttr = FrontendControllerFactory.GetEnhanceAttribute(controller.GetType());
-            if (!enhanceAttr.Disabled)
-            {
-                controller.UpdateViewEnginesCollection(() => FrontendControllerFactory.GetControllerPathTransformations(controller, enhanceAttr.VirtualPath));
-            }
-        }
-
-        /// <summary>
         /// Creates the specified controller by using the specified request context.
         /// </summary>
         /// <returns>The controller.</returns>
@@ -79,6 +66,19 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers
         {
             this.Dispose(true);
             GC.SuppressFinalize(this);
+        }
+        
+        /// <summary>
+        /// Enhances the view engines.
+        /// </summary>
+        /// <param name="controller">The controller.</param>
+        internal static void EnhanceViewEngines(Controller controller)
+        {
+            var enhanceAttr = FrontendControllerFactory.GetEnhanceAttribute(controller.GetType());
+            if (!enhanceAttr.Disabled)
+            {
+                controller.UpdateViewEnginesCollection(() => FrontendControllerFactory.GetControllerPathTransformations(controller, enhanceAttr.VirtualPath));
+            }
         }
         
         /// <summary>
