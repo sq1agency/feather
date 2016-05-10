@@ -49,7 +49,7 @@ namespace Telerik.Sitefinity.Frontend.TestUI.TestCases.ResourcePackages
         {
             RuntimeSettingsModificator.ExecuteWithClientTimeout(200000, () => BAT.Macros().User().EnsureAdminLoggedIn());
             BAT.Arrange(this.TestName).ExecuteSetUp();
-            RuntimeSettingsModificator.ExecuteWithClientTimeout(300000, () => BAT.Macros().NavigateTo().Dashboard());
+            RuntimeSettingsModificator.ExecuteWithClientTimeout(600000, () => BAT.Macros().NavigateTo().Dashboard());
         }
 
         /// <summary>
