@@ -32,6 +32,8 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Layouts
 
             this.mvcVersioningRoute = new System.Web.Routing.Route("Sitefinity/Versioning/{itemId}/{VersionNumber}", ObjectFactory.Resolve<MvcVersioningRouteHandler>());
             System.Web.Routing.RouteTable.Routes.Insert(1, this.mvcVersioningRoute);
+
+            EventHub.Subscribe<IPageTemplateViewModelCreatedEvent>(this.AugmentPageTemplateViewModel);
         }
 
         /// <summary>
@@ -40,6 +42,18 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Layouts
         public virtual void Uninitialize()
         {
             System.Web.Routing.RouteTable.Routes.Remove(this.mvcVersioningRoute);
+        }
+
+        private void AugmentPageTemplateViewModel(IPageTemplateViewModelCreatedEvent ev)
+        {
+            if (ev != null && ev.ViewModel != null && ev.ViewModel.Framework == PageTemplateFramework.Mvc && !string.IsNullOrEmpty(ev.ViewModel.Name))
+            {
+                var package = (new PackageManager()).GetPackageFromTemplateId(ev.ViewModel.Id.ToString());
+                if (!string.IsNullOrEmpty(package))
+                {
+                    ev.ViewModel.MasterPage = package;
+                }
+            }
         }
 
         private System.Web.Routing.Route mvcVersioningRoute;
