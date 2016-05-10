@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Telerik.Sitefinity.Frontend.TestUtilities;
+using Telerik.TestUI.Core.Utilities;
 
 namespace Telerik.Sitefinity.Frontend.TestUI.TestCases.ResourcePackages
 {
@@ -46,7 +47,7 @@ namespace Telerik.Sitefinity.Frontend.TestUI.TestCases.ResourcePackages
         /// </summary>
         protected override void ServerSetup()
         {
-            BAT.Macros().User().EnsureAdminLoggedIn();
+            RuntimeSettingsModificator.ExecuteWithClientTimeout(200000, () => BAT.Macros().User().EnsureAdminLoggedIn());
             BAT.Arrange(this.TestName).ExecuteSetUp();
         }
 
