@@ -24,8 +24,25 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Layouts
             if (template.GetTemplateFramework() != PageTemplateFramework.Mvc)
                 return null;
 
-            string templateName;
+            string templateName = LayoutResolver.ExtractTemplateName(template);
+
+            if (templateName == null)
+                return null;
+
+            var virtualBuilder = this.CreateLayoutVirtualPathBuilder();
+            var layoutVirtualPath = virtualBuilder.BuildPathFromName(templateName);
+            var doesLayoutExist = VirtualPathManager.FileExists(layoutVirtualPath);
+
+            if (!doesLayoutExist)
+                layoutVirtualPath = null;
+
+            return layoutVirtualPath;
+        }
+
+        internal static string ExtractTemplateName(Pages.Model.IPageTemplate template)
+        {
             var strictTemplate = template as PageTemplate;
+            string templateName;
             if (strictTemplate != null && strictTemplate.Name != null)
             {
                 templateName = strictTemplate.Name;
@@ -39,17 +56,7 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Layouts
                     templateName = null;
             }
 
-            if (templateName == null)
-                return null;
-
-            var virtualBuilder = this.CreateLayoutVirtualPathBuilder();
-            var layoutVirtualPath = virtualBuilder.BuildPathFromName(templateName);
-            var doesLayoutExist = VirtualPathManager.FileExists(layoutVirtualPath);
-
-            if (!doesLayoutExist)
-                layoutVirtualPath = null;
-
-            return layoutVirtualPath;
+            return templateName;
         }
 
         protected virtual LayoutVirtualPathBuilder CreateLayoutVirtualPathBuilder()

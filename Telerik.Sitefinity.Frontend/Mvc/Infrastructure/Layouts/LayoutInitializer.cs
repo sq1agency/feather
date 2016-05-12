@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Telerik.Microsoft.Practices.Unity;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Abstractions.VirtualPath;
@@ -41,17 +42,40 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Layouts
         /// </summary>
         public virtual void Uninitialize()
         {
+            EventHub.Unsubscribe<IPageTemplateViewModelCreatedEvent>(this.AugmentPageTemplateViewModel);
             System.Web.Routing.RouteTable.Routes.Remove(this.mvcVersioningRoute);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private void AugmentPageTemplateViewModel(IPageTemplateViewModelCreatedEvent ev)
         {
-            if (ev != null && ev.ViewModel != null && ev.ViewModel.Framework == PageTemplateFramework.Mvc && !string.IsNullOrEmpty(ev.ViewModel.Name))
+            if (ev != null && ev.ViewModel != null && !string.IsNullOrEmpty(ev.ViewModel.Name))
             {
                 var package = (new PackageManager()).GetPackageFromTemplateId(ev.ViewModel.Id.ToString());
                 if (!string.IsNullOrEmpty(package))
                 {
                     ev.ViewModel.MasterPage = package;
+                    if (ev.PageTemplate != null)
+                    {
+                        var layoutName = new TemplateTitleParser().GetLayoutName(ev.PageTemplate.Name);
+                        if (!string.IsNullOrEmpty(layoutName))
+                        {
+                            var displayPath = string.Format("{0}/MVC/Views/{1}/{2}.cshtml", package, LayoutRenderer.LayoutsFolderName, layoutName);
+                            var relativePath = string.Format("~/{0}/{1}", PackageManager.PackagesFolder, displayPath);
+                            try
+                            {
+                                var filePath = System.Web.Hosting.HostingEnvironment.MapPath(relativePath);
+                                if (File.Exists(filePath))
+                                {
+                                    ev.ViewModel.MasterPage = displayPath;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Write(string.Format("Cannot map path: {0}, Exception: {1}", relativePath, ex.ToString()), System.Diagnostics.TraceEventType.Error);
+                            }
+                        }
+                    }
                 }
             }
         }

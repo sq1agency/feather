@@ -231,7 +231,7 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Layouts
                 {
                     // {1} is the ControllerName argument in VirtualPathProviderViewEngines
                     var result = path
-                                    .Replace("{1}", "Layouts")
+                                    .Replace("{1}", LayoutRenderer.LayoutsFolderName)
                                     .Replace("~/", "~/{0}Mvc/".Arrange(baseVirtualPath));
 
                     result = (new VirtualPathBuilder()).AddParams(result, currentPackage);
@@ -269,6 +269,8 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Layouts
 
             writer.Write("</body></html>");
         }
+
+        internal const string LayoutsFolderName = "Layouts";
 
         #endregion
     }
