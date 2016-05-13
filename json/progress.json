@@ -1675,7 +1675,7 @@
                "expectedBy" : "",
                "longDescription" : "",
                "name" : "MVC goodness",
-               "progress" : 90,
+               "progress" : 100,
                "releases" : [
                   {
                      "article" : "Create-a-%E2%80%9CHello-World%E2%80%9D-MVC-widget-in-a-separate-assembly",
@@ -1727,10 +1727,13 @@
                      "tag" : "v.1.2.140.2"
                   },
                   {
-                     "name" : "Precompilation for widget templates"
+                     "commitHash" : "b0bfe35ea1beacd6e4ea281a60db8ef338629c63",
+                     "date" : "01-20-2016 17:35 +0200",
+                     "name" : "Precompilation for widget templates",
+                     "tag" : "v.1.4.410.0"
                   }
                ],
-               "shortDescription" : "In progress",
+               "shortDescription" : "Done",
                "unstable" : false
             },
             {
