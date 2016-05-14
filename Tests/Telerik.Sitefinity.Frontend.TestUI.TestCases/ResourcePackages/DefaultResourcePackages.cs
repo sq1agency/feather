@@ -33,6 +33,21 @@ namespace Telerik.Sitefinity.Frontend.TestUI.TestCases.ResourcePackages
             BAT.Wrappers().Backend().PageTemplates().PageTemplateModifyScreen().ClickBackToTemplatesButton();
         }
 
+        /// <summary>
+        /// Verifies the resource package layouts are displayed in "Based On" column.
+        /// </summary>
+        [TestMethod,
+        Owner(FeatherTeams.FeatherTeam),
+        TestCategory(FeatherTestCategories.PagesAndContent)]
+        public void VerifyResourcePackageLayoutsAreDisplayedInBasedOnColumn()
+        {
+            RuntimeSettingsModificator.ExecuteWithClientTimeout(1600000, () => BAT.Macros().NavigateTo().CustomPage("~/sitefinity/design/pagetemplates", false, null, new HtmlFindExpression("class=~sfMain")));
+            RuntimeSettingsModificator.ExecuteWithClientTimeout(1600000, () => BAT.Macros().User().EnsureAdminLoggedIn());
+            var text = BAT.Wrappers().Backend().PageTemplates().PageTemplateMainScreen().GetBasedOnTemplateText(BootstrapTemplate);
+
+            Assert.AreEqual("Bootstrap/.../Layouts/Bootstrap.default.cshtml", text, "Based On column does not indicate where which layout the template is based on.");
+        }
+
         private const string BootstrapTemplate = "Bootstrap.default";
         private const string PlaceHolderId = "Contentplaceholder1";
     }
