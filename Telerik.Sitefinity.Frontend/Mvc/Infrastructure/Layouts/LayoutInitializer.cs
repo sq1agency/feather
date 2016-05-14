@@ -60,14 +60,13 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Layouts
                         var layoutName = new TemplateTitleParser().GetLayoutName(ev.PageTemplate.Name);
                         if (!string.IsNullOrEmpty(layoutName))
                         {
-                            var displayPath = string.Format("{0}/MVC/Views/{1}/{2}.cshtml", package, LayoutRenderer.LayoutsFolderName, layoutName);
-                            var relativePath = string.Format("~/{0}/{1}", PackageManager.PackagesFolder, displayPath);
+                            var relativePath = string.Format("~/{0}/{1}/MVC/Views/{2}/{3}.cshtml", PackageManager.PackagesFolder, package, LayoutRenderer.LayoutsFolderName, layoutName);
                             try
                             {
                                 var filePath = System.Web.Hosting.HostingEnvironment.MapPath(relativePath);
                                 if (File.Exists(filePath))
                                 {
-                                    ev.ViewModel.MasterPage = displayPath;
+                                    ev.ViewModel.MasterPage = string.Format("{0}/.../{1}/{2}.cshtml", package, LayoutRenderer.LayoutsFolderName, layoutName);
                                 }
                             }
                             catch (Exception ex)
