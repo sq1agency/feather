@@ -55,23 +55,27 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Layouts
                 if (!string.IsNullOrEmpty(package))
                 {
                     ev.ViewModel.MasterPage = package;
-                    if (ev.PageTemplate != null)
+                }
+
+                if (ev.PageTemplate != null)
+                {
+                    var layoutName = new TemplateTitleParser().GetLayoutName(ev.PageTemplate.Name);
+                    if (!string.IsNullOrEmpty(layoutName))
                     {
-                        var layoutName = new TemplateTitleParser().GetLayoutName(ev.PageTemplate.Name);
-                        if (!string.IsNullOrEmpty(layoutName))
+                        if (!string.IsNullOrEmpty(package))
                         {
                             var relativePath = string.Format("~/{0}/{1}/MVC/Views/{2}/{3}.cshtml", PackageManager.PackagesFolder, package, LayoutRenderer.LayoutsFolderName, layoutName);
-                            try
+                            if (System.Web.Hosting.HostingEnvironment.VirtualPathProvider.FileExists(relativePath))
                             {
-                                var filePath = System.Web.Hosting.HostingEnvironment.MapPath(relativePath);
-                                if (File.Exists(filePath))
-                                {
-                                    ev.ViewModel.MasterPage = string.Format("{0}/.../{1}/{2}.cshtml", package, LayoutRenderer.LayoutsFolderName, layoutName);
-                                }
+                                ev.ViewModel.MasterPage = string.Format("{0}/.../{1}/{2}.cshtml", package, LayoutRenderer.LayoutsFolderName, layoutName);
                             }
-                            catch (Exception ex)
+                        }
+                        else
+                        {
+                            var relativePath = string.Format("~/MVC/Views/{0}/{1}.cshtml", LayoutRenderer.LayoutsFolderName, layoutName);
+                            if (System.Web.Hosting.HostingEnvironment.VirtualPathProvider.FileExists(relativePath))
                             {
-                                Log.Write(string.Format("Cannot map path: {0}, Exception: {1}", relativePath, ex.ToString()), System.Diagnostics.TraceEventType.Error);
+                                ev.ViewModel.MasterPage = string.Format(".../{0}/{1}.cshtml", LayoutRenderer.LayoutsFolderName, layoutName);
                             }
                         }
                     }
