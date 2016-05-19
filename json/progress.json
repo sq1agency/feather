@@ -574,17 +574,51 @@
                "progress" : 100,
                "shortDescription" : "Done",
                "unstable" : false,
-      			   "releases" : [
-                {
-                   "article" : "",
-                   "commitHash" : "e3ba7c1ec7edd7b302df342b0c2b8482b1de82b5",
-                   "date" : "2015-10-21 16:32 +0300",
-                   "name" : "Form selector implementation",
-                   "tag" : "v.1.4.360.0"
-                }
-              ]
+               "releases" : [
+                  {
+                     "article" : "",
+                     "commitHash" : "e3ba7c1ec7edd7b302df342b0c2b8482b1de82b5",
+                     "date" : "2015-10-21 16:32 +0300",
+                     "name" : "Form selector implementation",
+                     "tag" : "v.1.4.360.0"
+                  }
+               ]
+            },
+            {
+               "expectedBy" : "",
+               "longDescription" : "",
+               "name" : "Calendar selector",
+               "progress" : 100,
+               "shortDescription" : "Done",
+               "unstable" : false,
+               "releases" : [
+                  {
+                     "article" : "",
+                     "commitHash" : "96752f618c5d57b1749b3e568168ff7b0fa32934",
+                     "date" : "2016-05-19 16:38 +0300",
+                     "name" : "Calendar selector implementation",
+                     "tag" : "v.1.6.500.0"
+                  }
+               ]
+            },
+            {
+               "expectedBy" : "",
+               "longDescription" : "",
+               "name" : "Events selector",
+               "progress" : 100,
+               "shortDescription" : "Done",
+               "unstable" : false,
+               "releases" : [
+                  {
+                     "article" : "",
+                     "commitHash" : "96752f618c5d57b1749b3e568168ff7b0fa32934",
+                     "date" : "2016-05-19 16:38 +0300",
+                     "name" : "Events selector implementation",
+                     "tag" : "v.1.6.500.0"
+                  }
+               ]
             }
-				]
+         ]
       },
       {
          "description" : "",
@@ -966,15 +1000,15 @@
                "progress" : 100,
                "shortDescription" : "Done",
                "unstable" : false,
-      			   "releases" : [
-                {
-                   "article" : "",
-                   "commitHash" : "e3ba7c1ec7edd7b302df342b0c2b8482b1de82b5",
-                   "date" : "2015-10-21 16:32 +0300",
-                   "name" : "Forms widget implementation",
-                   "tag" : "v.1.4.360.0"
-                }
-      				]
+               "releases" : [
+                  {
+                     "article" : "",
+                     "commitHash" : "e3ba7c1ec7edd7b302df342b0c2b8482b1de82b5",
+                     "date" : "2015-10-21 16:32 +0300",
+                     "name" : "Forms widget implementation",
+                     "tag" : "v.1.4.360.0"
+                  }
+               ]
             },
             {
                "expectedBy" : "",
@@ -983,16 +1017,33 @@
                "progress" : 100,
                "shortDescription" : "Done",
                "unstable" : false,
-      			   "releases" : [
-                {
-                   "article" : "",
-                   "commitHash" : "e3ba7c1ec7edd7b302df342b0c2b8482b1de82b5",
-                   "date" : "2015-10-21 16:32 +0300",
-                   "name" : "Card widget implementation",
-                   "tag" : "v.1.4.360.0"
-                }
-      				]
-            },			
+               "releases" : [
+                  {
+                     "article" : "",
+                     "commitHash" : "e3ba7c1ec7edd7b302df342b0c2b8482b1de82b5",
+                     "date" : "2015-10-21 16:32 +0300",
+                     "name" : "Card widget implementation",
+                     "tag" : "v.1.4.360.0"
+                  }
+               ]
+            },
+            {
+               "expectedBy" : "",
+               "longDescription" : "",
+               "name" : "Events",
+               "progress" : 100,
+               "shortDescription" : "Done",
+               "unstable" : false,
+               "releases" : [
+                  {
+                     "article" : "",
+                     "commitHash" : "96752f618c5d57b1749b3e568168ff7b0fa32934",
+                     "date" : "2016-05-19 16:38 +0300",
+                     "name" : "Events widget implementation",
+                     "tag" : "v.1.6.500.0"
+                  }
+               ]
+            },
             {
                "expectedBy" : "",
                "longDescription" : "",
@@ -1070,14 +1121,6 @@
                "expectedBy" : "",
                "longDescription" : "",
                "name" : "Forums",
-               "progress" : 0,
-               "shortDescription" : "Not done",
-               "unstable" : false
-            },
-            {
-               "expectedBy" : "",
-               "longDescription" : "",
-               "name" : "Events",
                "progress" : 0,
                "shortDescription" : "Not done",
                "unstable" : false
