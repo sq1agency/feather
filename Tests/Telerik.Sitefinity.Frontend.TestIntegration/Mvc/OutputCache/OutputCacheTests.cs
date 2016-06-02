@@ -35,7 +35,7 @@ namespace Telerik.Sitefinity.Frontend.TestIntegration.OutputCache
             {
                 DateTimeController.Count = 0;
                 PageManager pageManager = PageManager.GetManager();
-                var template = pageManager.GetTemplates().Where(t => t.Name == templateTitle).FirstOrDefault();
+                var template = pageManager.GetTemplates().Where(t => t.Title == templateTitle).FirstOrDefault();
                 Assert.IsNotNull(template, "Template was not found");
 
                 Guid pageId = FeatherServerOperations.Pages().CreatePageWithTemplate(template, pageTitle, pageUrl);
