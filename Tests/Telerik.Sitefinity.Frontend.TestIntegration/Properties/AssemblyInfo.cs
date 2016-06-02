@@ -13,3 +13,4 @@ using Telerik.WebTestRunner.Server.Attributes;
 
 [assembly: IntegrationTests]
 [assembly: Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers.Attributes.ControllerContainer]
+[assembly: Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers.Attributes.ResourcePackage]
