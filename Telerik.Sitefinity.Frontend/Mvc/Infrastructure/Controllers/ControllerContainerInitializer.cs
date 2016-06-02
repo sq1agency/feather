@@ -142,7 +142,7 @@ namespace Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers
                 }
             }
 
-            return result;
+            return result.Distinct();
         }
 
         #endregion
