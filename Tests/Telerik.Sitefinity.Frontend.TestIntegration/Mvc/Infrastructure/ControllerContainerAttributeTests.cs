@@ -15,12 +15,12 @@ namespace Telerik.Sitefinity.Frontend.TestIntegration.Mvc.Infrastructure
     [TestFixture]
     [Category(TestCategories.MvcCore)]
     [Description("This class contains tests for ControllerContainerAttribute and ResourcePackageAttribute.")]
-    public class ControllerContainerTests
+    public class ControllerContainerAttributeTests
     {
         [Test]
         [Author(FeatherTeams.FeatherTeam)]
-        [Description("Checks whether SitefinityWebApp is added only once to ControllerContainerInitializer.ControllerContainerAssemblies if it contains both ControllerContainerAttribute and ResourcePackageAttribute")]
-        public void CheckSitefinityWebAppAssemblyAddedOnlyOnceToControllerContainerAssemblies()
+        [Description("Checks whether assembly is added only once to ControllerContainerInitializer.ControllerContainerAssemblies if it has both ControllerContainerAttribute and ResourcePackageAttribute set")]
+        public void ControllerContainerAssemblies_CheckAssemblyAddedOnlyOnce()
         {
             var assembly = Assembly.GetExecutingAssembly();
             Assert.IsTrue(assembly.CustomAttributes.Any(x => x.AttributeType == typeof(ControllerContainerAttribute)));
@@ -29,8 +29,7 @@ namespace Telerik.Sitefinity.Frontend.TestIntegration.Mvc.Infrastructure
             var controllerContainerInitializer = new ControllerContainerInitializer();
             Assert.IsTrue(controllerContainerInitializer.ControllerContainerAssemblies.Count(x => x.FullName == assembly.FullName) == 1);
 
-            var responseContent = WebRequestHelper.GetPageWebContent(WebRequestHelper.GetSiteLocation());
-            Assert.IsNotNull(responseContent);
+            Assert.DoesNotThrow(() => WebRequestHelper.GetPageWebContent(WebRequestHelper.GetSiteLocation()), "Sitefinity did not start properly");
         }
     }
 }

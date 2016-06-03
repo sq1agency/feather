@@ -283,8 +283,10 @@
     <Compile Include="DummyClasses\Mvc\Helpers\DummyLocalizationControllerResources.cs" />
     <Compile Include="DummyClasses\Mvc\Helpers\DummyLocalizedController.cs" />
     <Compile Include="DummyClasses\Mvc\Helpers\DummyViewDataContainer.cs" />
+    <Compile Include="DummyClasses\IDummyPOCO.cs" />
     <Compile Include="DummyClasses\Mvc\Models\DummyDesignerModel.cs" />
     <Compile Include="DummyClasses\Mvc\Models\NewsContentModel.cs" />
+    <Compile Include="DummyClasses\DummyPOCO.cs" />
     <Compile Include="DummyClasses\ResourceResolvers\DummyDatabaseResourceResolver.cs" />
     <Compile Include="DummyClasses\FileMonitoring\DummyFileInfo.cs" />
     <Compile Include="DummyClasses\FileMonitoring\DummyFileMonitor.cs" />
